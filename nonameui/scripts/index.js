@@ -28,6 +28,7 @@ var Application;
         function SearchField() {
             var _this = this;
             this.sugList = $("#suggestions");
+            var sugList2 = this.sugList.data("kendoMobileListView");
             this.sugList.bind("click", function (e) {
                 _this.onClick(e);
             });
