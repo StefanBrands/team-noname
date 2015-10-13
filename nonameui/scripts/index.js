@@ -16,28 +16,12 @@
 * specific language governing permissions and limitations
 * under the License.
 */
+/// <reference path="./typings/jquery.d.ts" />
 var Application;
 (function (Application) {
     function initialize() {
-        var sugList = $("#suggestions");
-
-        $("#searchField").on("input", function (e) {
-            var text = $(this).val();
-            if (text.length < 1) {
-                sugList.html("");
-                sugList.listview("refresh");
-            } else {
-                $.get("service.cfc?method=getSuggestions", { search: text }, function (res, code) {
-                    var str = "";
-                    for (var i = 0, len = res.length; i < len; i++) {
-                        str += "<li>" + res[i] + "</li>";
-                    }
-                    sugList.html(str);
-                    sugList.listview("refresh");
-                    console.dir(res);
-                }, "json");
-            }
-        });
+        var searchField = new SearchField();
+        searchField.initialize();
 
         document.addEventListener('deviceready', onDeviceReady, false);
     }
@@ -58,5 +42,37 @@ var Application;
 
         console.log('Received Event: ' + id);
     }
+
+    var SearchField = (function () {
+        function SearchField() {
+        }
+        SearchField.prototype.initialize = function () {
+            var _this = this;
+            $("#searchField").on("input", function () {
+                return _this.oninput;
+            });
+        };
+
+        SearchField.prototype.oninput = function (e) {
+            var sugList = $("#suggestions");
+            var text = $(this).val();
+            if (text.length < 1) {
+                sugList.html("");
+                sugList.listview("refresh");
+            } else {
+                $.get("service.cfc?method=getSuggestions", { search: text }, function (res, code) {
+                    var str = "";
+                    for (var i = 0, len = res.length; i < len; i++) {
+                        str += "<li>" + res[i] + "</li>";
+                    }
+                    sugList.html(str);
+                    sugList.listview("refresh");
+                    console.dir(res);
+                }, "json");
+            }
+        };
+        return SearchField;
+    })();
+    Application.SearchField = SearchField;
 })(Application || (Application = {}));
 //# sourceMappingURL=index.js.map
