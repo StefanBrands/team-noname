@@ -30,17 +30,24 @@ module Application {
         
         constructor() {
             this.sugList = $("#suggestions");
+            this.sugList.bind("click", (e) => {
+                this.onClick(e);
+            });
+        }
+
+        private onClick(e): void {
+            $("#searchField").val(e.target.textContent);
+            this.sugList.html("");
         }
         
         public initialize(): void {
-            $("#searchField").on("input", (e) => {this.onInput(e); });
+            $("#searchField").on("input", (e) => { this.onInput(e); });
         }
 
         private onInput(e: JQueryObject): void {
              var text = $("#searchField").val();
              if(text.length < 1) {
                  this.sugList.html("");
-                 this.sugList.listview("refresh");
              } else {
                  $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); } ,"json");
              }
@@ -51,10 +58,9 @@ module Application {
             var str = "";
             for (var i = 0, len = res.length; i < len; i++) {
                  var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
-                 str += "<li class=\"searchRO\">"+searchResultObject.objectCode+"</li>";
+                 str += "<li>"+searchResultObject.objectCode+"</li>";
              }
              this.sugList.html(str);
-             this.sugList.listview("refresh");
              console.dir(res);
         }
     }

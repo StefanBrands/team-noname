@@ -27,8 +27,17 @@ var Application;
 
     var SearchField = (function () {
         function SearchField() {
+            var _this = this;
             this.sugList = $("#suggestions");
+            this.sugList.bind("click", function (e) {
+                _this.onClick(e);
+            });
         }
+        SearchField.prototype.onClick = function (e) {
+            $("#searchField").val(e.target.textContent);
+            this.sugList.html("");
+        };
+
         SearchField.prototype.initialize = function () {
             var _this = this;
             $("#searchField").on("input", function (e) {
@@ -41,7 +50,6 @@ var Application;
             var text = $("#searchField").val();
             if (text.length < 1) {
                 this.sugList.html("");
-                this.sugList.listview("refresh");
             } else {
                 $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
                     _this.onServicecallReturn(res, code);
@@ -53,10 +61,9 @@ var Application;
             var str = "";
             for (var i = 0, len = res.length; i < len; i++) {
                 var searchResultObject = res[i];
-                str += "<li class=\"searchRO\">" + searchResultObject.objectCode + "</li>";
+                str += "<li>" + searchResultObject.objectCode + "</li>";
             }
             this.sugList.html(str);
-            this.sugList.listview("refresh");
             console.dir(res);
         };
         return SearchField;
