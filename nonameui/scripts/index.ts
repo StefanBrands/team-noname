@@ -47,30 +47,32 @@ module Application {
         private onInput(e: JQueryObject): void {
             var text = this.srchFld.val();
             
-             if(text.length < 1) {
-                 this.sugList.html("");
-             } else {
-                 if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
-                     this.runningCall.abort();
-                 this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
-             }
-            
+            if (text.length < 1) {
+                this.sugList.html("");
+            } else {
+                if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
+                    this.runningCall.abort();
+                
+                this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
+            }
         }
-        
+
         private onClick(e): void {
             this.srchFld.val(e.target.textContent);
             this.sugList.html("");
         }
-        
-        private onServicecallReturn(res,code) {
+
+        private onServicecallReturn(res, code) {
             var str = "";
+            
             for (var i = 0, len = res.length; i < len; i++) {
-                 var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
-                 str += "<li>"+searchResultObject.objectCode+"</li>";
-             }
-             this.sugList.html(str);
+                var searchResultObject: SearchResultObject = <SearchResultObject>res[i];
+                str += "<li>" + searchResultObject.objectCode + "</li>";
+            }
+            
+            this.sugList.html(str);
             console.dir(res);
-            this.runningCall=null;
+            this.runningCall = null;
         }
     }
 

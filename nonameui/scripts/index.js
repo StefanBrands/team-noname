@@ -50,6 +50,7 @@ var Application;
             } else {
                 if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                     this.runningCall.abort();
+
                 this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
                     _this.onServicecallReturn(res, code);
                 }, "json");
@@ -63,10 +64,12 @@ var Application;
 
         SearchField.prototype.onServicecallReturn = function (res, code) {
             var str = "";
+
             for (var i = 0, len = res.length; i < len; i++) {
                 var searchResultObject = res[i];
                 str += "<li>" + searchResultObject.objectCode + "</li>";
             }
+
             this.sugList.html(str);
             console.dir(res);
             this.runningCall = null;
