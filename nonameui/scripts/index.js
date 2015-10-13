@@ -56,6 +56,7 @@ var Application;
             }
             this.sugList.html(str);
             this.sugList.listview("refresh");
+
             console.dir(res);
         };
         return SearchField;

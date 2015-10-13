@@ -26,7 +26,7 @@ module Application {
     }
 
     export class SearchField {
-        private sugList;
+        private sugList: kendo.ui.ListView;
         
         constructor() {
             this.sugList = $("#suggestions");
@@ -54,6 +54,7 @@ module Application {
              }
              this.sugList.html(str);
              this.sugList.listview("refresh");
+            
              console.dir(res);
          }
     }
