@@ -46,30 +46,33 @@ module Application {
     }
 
     export class SearchField {
+        private sugList;
         constructor() {
+            this.sugList = $("#suggestions");
         }
         public initialize(): void {
-            $("#searchField").on("input", ()=>this.oninput);
+            $("#searchField").on("input", ()=>this.onInput);
         }
 
-        private oninput(e: JQueryObject): void {
-            var sugList = $("#suggestions");
+        private onInput(e: JQueryObject): void {
              var text = $(this).val();
              if(text.length < 1) {
-                 sugList.html("");
-                 sugList.listview("refresh");
+                 this.sugList.html("");
+                 this.sugList.listview("refresh");
              } else {
-                 $.get("service.cfc?method=getSuggestions", {search:text}, function(res,code) {
-                     var str = "";
-                     for(var i=0, len=res.length; i<len; i++) {
-                         str += "<li>"+res[i]+"</li>";
-                     }
-                     sugList.html(str);
-                     sugList.listview("refresh");
-                     console.dir(res);
-                 },"json");
+                 $.get("service.cfc?method=getSuggestions", {search:text},()=>this.onServicecallReturn ,"json");
              }
             
         }
+        
+        private onServicecallReturn(res,code) {
+             var str = "";
+             for(var i=0, len=res.length; i<len; i++) {
+                 str += "<li>"+res[i]+"</li>";
+             }
+             this.sugList.html(str);
+             this.sugList.listview("refresh");
+             console.dir(res);
+         }
     }
 }

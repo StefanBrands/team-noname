@@ -45,31 +45,36 @@ var Application;
 
     var SearchField = (function () {
         function SearchField() {
+            this.sugList = $("#suggestions");
         }
         SearchField.prototype.initialize = function () {
             var _this = this;
             $("#searchField").on("input", function () {
-                return _this.oninput;
+                return _this.onInput;
             });
         };
 
-        SearchField.prototype.oninput = function (e) {
-            var sugList = $("#suggestions");
+        SearchField.prototype.onInput = function (e) {
+            var _this = this;
             var text = $(this).val();
             if (text.length < 1) {
-                sugList.html("");
-                sugList.listview("refresh");
+                this.sugList.html("");
+                this.sugList.listview("refresh");
             } else {
-                $.get("service.cfc?method=getSuggestions", { search: text }, function (res, code) {
-                    var str = "";
-                    for (var i = 0, len = res.length; i < len; i++) {
-                        str += "<li>" + res[i] + "</li>";
-                    }
-                    sugList.html(str);
-                    sugList.listview("refresh");
-                    console.dir(res);
+                $.get("service.cfc?method=getSuggestions", { search: text }, function () {
+                    return _this.onServicecallReturn;
                 }, "json");
             }
+        };
+
+        SearchField.prototype.onServicecallReturn = function (res, code) {
+            var str = "";
+            for (var i = 0, len = res.length; i < len; i++) {
+                str += "<li>" + res[i] + "</li>";
+            }
+            this.sugList.html(str);
+            this.sugList.listview("refresh");
+            console.dir(res);
         };
         return SearchField;
     })();
