@@ -27,6 +27,7 @@ module Application {
 
     export class SearchField {
         private sugList;
+        private runningCall: XMLHttpRequest;
         
         constructor() {
             this.sugList = $("#suggestions");
@@ -49,7 +50,9 @@ module Application {
              if(text.length < 1) {
                  this.sugList.html("");
              } else {
-                 $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); } ,"json");
+                 if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
+                     this.runningCall.abort();
+                 this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
              }
             
         }
@@ -61,7 +64,8 @@ module Application {
                  str += "<li>"+searchResultObject.objectCode+"</li>";
              }
              this.sugList.html(str);
-             console.dir(res);
+            console.dir(res);
+            this.runningCall=null;
         }
     }
 
