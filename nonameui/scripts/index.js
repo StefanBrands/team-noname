@@ -52,7 +52,8 @@ var Application;
         SearchField.prototype.onServicecallReturn = function (res, code) {
             var str = "";
             for (var i = 0, len = res.length; i < len; i++) {
-                str += "<li>" + res[i].objectCode + "</li>";
+                var searchResultObject = res[i];
+                str += "<li class=\"searchRO\">" + searchResultObject.objectCode + "</li>";
             }
             this.sugList.html(str);
             this.sugList.listview("refresh");
