@@ -57,4 +57,8 @@ module Application {
              console.dir(res);
          }
     }
+
+    export interface SearchResultObject {
+        
+    }
 }
