@@ -22,8 +22,7 @@ var Application;
     function initialize() {
         var searchField = new SearchField();
         searchField.initialize();
-
-        document.addEventListener('deviceready', onDeviceReady, false);
+        //document.addEventListener('deviceready', onDeviceReady, false);
     }
     Application.initialize = initialize;
 
@@ -49,8 +48,8 @@ var Application;
         }
         SearchField.prototype.initialize = function () {
             var _this = this;
-            $("#searchField").on("input", function () {
-                return _this.onInput;
+            $("#searchField").on("input", function (e) {
+                _this.onInput(e);
             });
         };
 
@@ -61,8 +60,8 @@ var Application;
                 this.sugList.html("");
                 this.sugList.listview("refresh");
             } else {
-                $.get("service.cfc?method=getSuggestions", { search: text }, function () {
-                    return _this.onServicecallReturn;
+                $.get("service.cfc?method=getSuggestions", { search: text }, function (res, code) {
+                    _this.onServicecallReturn(res, code);
                 }, "json");
             }
         };

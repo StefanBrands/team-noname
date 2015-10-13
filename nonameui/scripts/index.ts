@@ -24,7 +24,7 @@ module Application {
         var searchField: SearchField = new SearchField();
         searchField.initialize();
         
-        document.addEventListener('deviceready', onDeviceReady, false);
+        //document.addEventListener('deviceready', onDeviceReady, false);
     }
 
     function onDeviceReady() {
@@ -51,7 +51,7 @@ module Application {
             this.sugList = $("#suggestions");
         }
         public initialize(): void {
-            $("#searchField").on("input", ()=>this.onInput);
+            $("#searchField").on("input", (e) => {this.onInput(e); });
         }
 
         private onInput(e: JQueryObject): void {
@@ -60,7 +60,7 @@ module Application {
                  this.sugList.html("");
                  this.sugList.listview("refresh");
              } else {
-                 $.get("service.cfc?method=getSuggestions", {search:text},()=>this.onServicecallReturn ,"json");
+                 $.get("service.cfc?method=getSuggestions", { search: text }, (res, code) => { this.onServicecallReturn(res, code); } ,"json");
              }
             
         }
