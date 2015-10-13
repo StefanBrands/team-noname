@@ -26,7 +26,7 @@ module Application {
     }
 
     export class SearchField {
-        private sugList: kendo.ui.ListView;
+        private sugList;
         
         constructor() {
             this.sugList = $("#suggestions");
@@ -48,18 +48,23 @@ module Application {
         }
         
         private onServicecallReturn(res,code) {
-             var str = "";
-             for(var i=0, len=res.length; i<len; i++) {
-                 str += "<li>"+res[i].objectCode+"</li>";
+            var str = "";
+            for (var i = 0, len = res.length; i < len; i++) {
+                 var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
+                 str += "<li class=\"searchRO\">"+searchResultObject.objectCode+"</li>";
              }
              this.sugList.html(str);
              this.sugList.listview("refresh");
             
              console.dir(res);
-         }
+        }
     }
 
     export interface SearchResultObject {
-        
+        objectCode: string;
+        objectDescription: string;
+        objectKey: string;
+        objectType: string;
+        entityURI: string;
     }
 }
