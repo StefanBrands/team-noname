@@ -16,7 +16,6 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-/// <reference path="./typings/jquery.d.ts" />
 var Application;
 (function (Application) {
     function initialize() {
