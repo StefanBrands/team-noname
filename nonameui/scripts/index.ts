@@ -25,6 +25,7 @@ module Application {
 
         receivedEvent('deviceready');
         navigator.splashscreen.hide();
+        
     }
 
     function receivedEvent(id) {
