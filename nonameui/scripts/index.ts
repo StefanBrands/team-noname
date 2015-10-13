@@ -24,28 +24,29 @@ module Application {
     }
 
     export class SearchField {
+        private srchFld: JQuery;
         private sugList: JQuery;
         private runningCall: XMLHttpRequest;
         
         constructor() {
+        }
+
+        public initialize(): void {
+            this.srchFld = $("#searchField");
             this.sugList = $("#suggestions");
+            
+            this.srchFld.bind("input", (e) => {
+                this.onInput(e);
+            });
+            
             this.sugList.bind("click", (e) => {
                 this.onClick(e);
             });
         }
 
-        private onClick(e): void {
-            $("#searchField").val(e.target.textContent);
-            this.sugList2 = $("#suggestions").data("kendoMobileListView");
-            this.sugList.html("");
-        }
-        
-        public initialize(): void {
-            $("#searchField").on("input", (e) => { this.onInput(e); });
-        }
-
         private onInput(e: JQueryObject): void {
-             var text = $("#searchField").val();
+            var text = this.srchFld.val();
+            
              if(text.length < 1) {
                  this.sugList.html("");
              } else {
@@ -54,6 +55,11 @@ module Application {
                  this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
              }
             
+        }
+        
+        private onClick(e): void {
+            this.srchFld.val(e.target.textContent);
+            this.sugList.html("");
         }
         
         private onServicecallReturn(res,code) {

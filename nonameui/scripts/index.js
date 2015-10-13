@@ -26,28 +26,25 @@ var Application;
 
     var SearchField = (function () {
         function SearchField() {
-            var _this = this;
-            this.sugList = $("#suggestions");
-            this.sugList.bind("click", function (e) {
-                _this.onClick(e);
-            });
         }
-        SearchField.prototype.onClick = function (e) {
-            $("#searchField").val(e.target.textContent);
-            this.sugList2 = $("#suggestions").data("kendoMobileListView");
-            this.sugList.html("");
-        };
-
         SearchField.prototype.initialize = function () {
             var _this = this;
-            $("#searchField").on("input", function (e) {
+            this.srchFld = $("#searchField");
+            this.sugList = $("#suggestions");
+
+            this.srchFld.bind("input", function (e) {
                 _this.onInput(e);
+            });
+
+            this.sugList.bind("click", function (e) {
+                _this.onClick(e);
             });
         };
 
         SearchField.prototype.onInput = function (e) {
             var _this = this;
-            var text = $("#searchField").val();
+            var text = this.srchFld.val();
+
             if (text.length < 1) {
                 this.sugList.html("");
             } else {
@@ -57,6 +54,11 @@ var Application;
                     _this.onServicecallReturn(res, code);
                 }, "json");
             }
+        };
+
+        SearchField.prototype.onClick = function (e) {
+            this.srchFld.val(e.target.textContent);
+            this.sugList.html("");
         };
 
         SearchField.prototype.onServicecallReturn = function (res, code) {
