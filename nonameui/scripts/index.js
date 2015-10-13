@@ -38,12 +38,12 @@ var Application;
 
         SearchField.prototype.onInput = function (e) {
             var _this = this;
-            var text = $(this).val();
+            var text = $("#searchField").val();
             if (text.length < 1) {
                 this.sugList.html("");
                 this.sugList.listview("refresh");
             } else {
-                $.get("service.cfc?method=getSuggestions", { search: text }, function (res, code) {
+                $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
                     _this.onServicecallReturn(res, code);
                 }, "json");
             }
@@ -52,7 +52,7 @@ var Application;
         SearchField.prototype.onServicecallReturn = function (res, code) {
             var str = "";
             for (var i = 0, len = res.length; i < len; i++) {
-                str += "<li>" + res[i] + "</li>";
+                str += "<li>" + res[i].objectCode + "</li>";
             }
             this.sugList.html(str);
             this.sugList.listview("refresh");

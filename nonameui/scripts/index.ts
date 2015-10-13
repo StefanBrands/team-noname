@@ -27,20 +27,22 @@ module Application {
 
     export class SearchField {
         private sugList;
+        
         constructor() {
             this.sugList = $("#suggestions");
         }
+        
         public initialize(): void {
             $("#searchField").on("input", (e) => {this.onInput(e); });
         }
 
         private onInput(e: JQueryObject): void {
-             var text = $(this).val();
+             var text = $("#searchField").val();
              if(text.length < 1) {
                  this.sugList.html("");
                  this.sugList.listview("refresh");
              } else {
-                 $.get("service.cfc?method=getSuggestions", { search: text }, (res, code) => { this.onServicecallReturn(res, code); } ,"json");
+                 $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); } ,"json");
              }
             
         }
@@ -48,7 +50,7 @@ module Application {
         private onServicecallReturn(res,code) {
              var str = "";
              for(var i=0, len=res.length; i<len; i++) {
-                 str += "<li>"+res[i]+"</li>";
+                 str += "<li>"+res[i].objectCode+"</li>";
              }
              this.sugList.html(str);
              this.sugList.listview("refresh");
