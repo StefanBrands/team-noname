@@ -35,6 +35,7 @@ var Application;
         }
         SearchField.prototype.onClick = function (e) {
             $("#searchField").val(e.target.textContent);
+            this.sugList2 = $("#suggestions").data("kendoMobileListView");
             this.sugList.html("");
         };
 

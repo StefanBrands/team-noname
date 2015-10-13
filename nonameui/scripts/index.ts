@@ -38,6 +38,7 @@ module Application {
 
         private onClick(e): void {
             $("#searchField").val(e.target.textContent);
+            this.sugList2 = $("#suggestions").data("kendoMobileListView");
             this.sugList.html("");
         }
         
