@@ -23,26 +23,6 @@ module Application {
     export function initialize() {
         var searchField: SearchField = new SearchField();
         searchField.initialize();
-        
-        //document.addEventListener('deviceready', onDeviceReady, false);
-    }
-
-    function onDeviceReady() {
-
-        receivedEvent('deviceready');
-        navigator.splashscreen.hide();
-        
-    }
-
-    function receivedEvent(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     }
 
     export class SearchField {
