@@ -17,8 +17,6 @@
  * under the License.
  */
 
-/// <reference path="./typings/jquery.d.ts" />
-
 module Application {
     export function initialize() {
         var searchField: SearchField = new SearchField();
@@ -26,7 +24,7 @@ module Application {
     }
 
     export class SearchField {
-        private sugList;
+        private sugList: JQuery;
         private runningCall: XMLHttpRequest;
         
         constructor() {
