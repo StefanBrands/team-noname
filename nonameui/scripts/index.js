@@ -19,27 +19,97 @@
 var Application;
 (function (Application) {
     function initialize() {
-        var searchField = new SearchField();
-        searchField.initialize();
+        document.addEventListener('deviceready', onDeviceReady, false);
     }
     Application.initialize = initialize;
 
-    var SearchField = (function () {
-        function SearchField() {
+    function onDeviceReady() {
+        var app = new kendo.mobile.Application();
+        var controller = new Controller();
+        navigator.splashscreen.hide();
+    }
+    var Controller = (function () {
+        function Controller() {
             var _this = this;
-            this.sugList = $("#suggestions");
-            var sugList2 = this.sugList.data("kendoMobileListView");
-            this.sugList.bind("click", function (e) {
-                _this.onClick(e);
+            this.navBar = $("#navbar");
+            this.homeView = $("#home");
+            this.detailsView = $("#details");
+            this.searchField = new SearchField(this);
+            /*
+            this.DetailsView.bind("show", (e) => {
+            this.onDetailsViewShow(e);
+            });
+            */
+            this.TabStrip.bind("select", function (e) {
+                _this.onTabStripSelect(e);
             });
         }
+        Object.defineProperty(Controller.prototype, "TabStrip", {
+            get: function () {
+                return this.navBar.data("kendoMobileTabStrip");
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Controller.prototype, "HomeView", {
+            get: function () {
+                return this.homeView.data("kendoMobileView");
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(Controller.prototype, "DetailsView", {
+            get: function () {
+                return this.detailsView.data("kendoMobileView");
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Controller.prototype.onDetailsViewShow = function (e) {
+        };
+
+        Controller.prototype.onTabStripSelect = function (e) {
+            if (e == null || e.item[0].hash == "#details") {
+            }
+        };
+
+        Controller.prototype.onSearchFieldSelect = function () {
+            this.TabStrip.switchTo("#details");
+            this.onTabStripSelect(null);
+        };
+        return Controller;
+    })();
+    Application.Controller = Controller;
+
+    var SearchField = (function () {
+        function SearchField(searchFieldSelectEventHandler) {
+            this.sugList = $("#suggestions");
+            this.searchFieldSelectEventHandler = searchFieldSelectEventHandler;
+            this.initialize();
+        }
+        Object.defineProperty(SearchField.prototype, "kendoMobileListView", {
+            get: function () {
+                return this.sugList.data("kendoMobileListView");
+            },
+            enumerable: true,
+            configurable: true
+        });
+
         SearchField.prototype.onClick = function (e) {
             $("#searchField").val(e.target.textContent);
             this.sugList.html("");
+            if (this.searchFieldSelectEventHandler != null)
+                this.searchFieldSelectEventHandler.onSearchFieldSelect();
         };
 
         SearchField.prototype.initialize = function () {
             var _this = this;
+            this.sugList.bind("click", function (e) {
+                _this.onClick(e);
+            });
             $("#searchField").on("input", function (e) {
                 _this.onInput(e);
             });
@@ -53,7 +123,7 @@ var Application;
             } else {
                 if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                     this.runningCall.abort();
-                this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
+                this.runningCall = $.get("http://localhost:8080/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
                     _this.onServicecallReturn(res, code);
                 }, "json");
             }

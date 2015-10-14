@@ -6,10 +6,20 @@
     <link href="css/kendo.mobile.all.min.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="app">
+        <div id="deviceready" class="blink">
+        </div>
+    </div>
+
     <div id="home" data-role="view" data-layout="default">
         <p>
              Search <input type="search" id="searchField" placeholder="Search">
              <ul id="suggestions" data-role="listview" data-inset="true"></ul>
+         </p>
+    </div>
+    <div id="details" data-role="view" data-layout="default">
+        <p>
+             Details:
          </p>
     </div>
 
@@ -19,16 +29,17 @@
         </header>
         <!--View content will render here-->
         <footer data-role="footer">
-            <div data-role="tabstrip">
+            <div id="navbar" data-role="tabstrip">
                 <a href="#home">Home</a>
+                <a href="#details">Details</a>
             </div>
         </footer>
     </section>
+    <script type="text/javascript" src="cordova.js"></script>
     <script src="scripts/jquery-2.1.4.min.js"></script>
     <script src="scripts/kendo.all.min.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
     <script>
-        var app = new kendo.mobile.Application();
         Application.initialize();
     </script>
 </body>

@@ -19,27 +19,89 @@
 
 module Application {
     export function initialize() {
-        var searchField: SearchField = new SearchField();
-        searchField.initialize();
+        document.addEventListener('deviceready', onDeviceReady, false);
     }
 
-    export class SearchField {
-        private sugList: JQuery;
-        private runningCall: XMLHttpRequest;
+    function onDeviceReady() {
+        var app = new kendo.mobile.Application();
+        var controller: Controller = new Controller();
+        navigator.splashscreen.hide();
+    }
+    export class Controller implements SearchFieldSelectEventHandler {
+        private navBar: JQuery = $("#navbar");
+        private homeView: JQuery = $("#home");
+        private detailsView: JQuery = $("#details");
         
+        private searchField: SearchField = new SearchField(this);
+
         constructor() {
-            this.sugList = $("#suggestions");
-            this.sugList.bind("click", (e) => {
-                this.onClick(e);
+            /*
+            this.DetailsView.bind("show", (e) => {
+                this.onDetailsViewShow(e);
             });
+            */
+            this.TabStrip.bind("select", (e) => {
+                this.onTabStripSelect(e);
+            });
+        }
+
+        private get TabStrip(): kendo.mobile.ui.TabStrip {
+            return this.navBar.data("kendoMobileTabStrip");
+        }
+
+        private get HomeView(): kendo.mobile.ui.View {
+            return this.homeView.data("kendoMobileView");
+        }
+
+        private get DetailsView(): kendo.mobile.ui.View {
+            return this.detailsView.data("kendoMobileView");
+        }
+
+        private onDetailsViewShow(e: kendo.mobile.ui.ViewShowEvent): void {
+            
+        }
+
+        private onTabStripSelect(e: kendo.mobile.ui.TabStripSelectEvent): void {
+            if (e==null || e.item[0].hash == "#details"){
+            }
+        }
+
+        private onSearchFieldSelect(): void {
+            this.TabStrip.switchTo("#details");
+            this.onTabStripSelect(null);
+        }
+
+    }
+
+    export interface SearchFieldSelectEventHandler {
+        onSearchFieldSelect(): void;
+    }
+    
+    export class SearchField {
+        private sugList: JQuery=$("#suggestions");
+        private runningCall: XMLHttpRequest;
+        private searchFieldSelectEventHandler: SearchFieldSelectEventHandler;
+        
+        constructor(searchFieldSelectEventHandler: SearchFieldSelectEventHandler) {
+            this.searchFieldSelectEventHandler = searchFieldSelectEventHandler;
+            this.initialize();
+        }
+        
+        public get kendoMobileListView(): kendo.mobile.ui.ListView {
+            return this.sugList.data("kendoMobileListView");
         }
 
         private onClick(e): void {
             $("#searchField").val(e.target.textContent);
             this.sugList.html("");
+            if (this.searchFieldSelectEventHandler != null)
+                this.searchFieldSelectEventHandler.onSearchFieldSelect();
         }
         
-        public initialize(): void {
+        private initialize(): void {
+            this.sugList.bind("click", (e) => {
+                this.onClick(e);
+            });
             $("#searchField").on("input", (e) => { this.onInput(e); });
         }
 
@@ -50,7 +112,7 @@ module Application {
              } else {
                  if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                      this.runningCall.abort();
-                 this.runningCall = $.get("http://vmcip01.qad.com:22000/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
+                 this.runningCall = $.get("http://localhost:8080/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
              }
             
         }
@@ -74,4 +136,5 @@ module Application {
         objectType: string;
         entityURI: string;
     }
+
 }
