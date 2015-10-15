@@ -2,7 +2,8 @@ var Application;
 (function (Application) {
     var ObjectRenderer = (function () {
         function ObjectRenderer(baseUrl) {
-            this.objectRendererJQ = $("#objectRenderer");
+            this.objectRendererLabelsJQ = $("#objectRendererLabels");
+            this.objectRendererValuesJQ = $("#objectRendererValues");
             this.baseUrl = baseUrl;
         }
         ObjectRenderer.prototype.render = function (entityMetadata, entityObject) {
@@ -12,10 +13,12 @@ var Application;
         };
 
         ObjectRenderer.prototype.renderField = function (field, fieldValue) {
+            this.objectRendererLabelsJQ.append(field.fieldLabel + "<br/>");
+
             if (field.dataType.toLowerCase().indexOf("date") >= 0)
-                this.objectRendererJQ.append(field.fieldLabel + ": " + (new Date(fieldValue)).toLocaleDateString() + "<br/>");
+                this.objectRendererValuesJQ.append((new Date(fieldValue)).toLocaleDateString() + "<br/>");
             else
-                this.objectRendererJQ.append(field.fieldLabel + ": " + fieldValue + "<br/>");
+                this.objectRendererValuesJQ.append(fieldValue + "<br/>");
         };
         return ObjectRenderer;
     })();

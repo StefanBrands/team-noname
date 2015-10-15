@@ -2,7 +2,8 @@ module Application {
 
     export class ObjectRenderer {
         private baseUrl: string;
-        private objectRendererJQ: JQuery = $("#objectRenderer");
+        private objectRendererLabelsJQ: JQuery = $("#objectRendererLabels");
+        private objectRendererValuesJQ: JQuery = $("#objectRendererValues");
         private entityMetadata: EntityMetadata[];
         private entityObject: EntityObject;
         
@@ -17,12 +18,12 @@ module Application {
         }
 
         private renderField(field: EntityMetadata, fieldValue: any) {
+            this.objectRendererLabelsJQ.append(field.fieldLabel + "<br/>");
+            
             if (field.dataType.toLowerCase().indexOf("date")>=0)
-                this.objectRendererJQ.append(field.fieldLabel + ": " + (new Date(fieldValue)).toLocaleDateString() + "<br/>");
+                this.objectRendererValuesJQ.append((new Date(fieldValue)).toLocaleDateString() + "<br/>");
             else
-                this.objectRendererJQ.append(field.fieldLabel + ": " + fieldValue + "<br/>");
+                this.objectRendererValuesJQ.append(fieldValue + "<br/>");
         }
-        
-        
    }
 }
