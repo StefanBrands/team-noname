@@ -24,7 +24,7 @@ module Application {
 
     function onDeviceReady() {
         var app = new kendo.mobile.Application();
-        var controller: Controller = new Controller();
+        var controller: Controller = new Controller(app);
         navigator.splashscreen.hide();
     }
 

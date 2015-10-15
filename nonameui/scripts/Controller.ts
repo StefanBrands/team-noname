@@ -1,12 +1,14 @@
+/// <reference path="./SearchField.ts" />
 module Application {
     export class Controller implements SearchFieldSelectEventHandler {
+        private app: kendo.mobile.Application;
         private navBar: JQuery = $("#navbar");
         private homeView: JQuery = $("#home");
         private detailsView: JQuery = $("#details");
-        
         private searchField: SearchField = new SearchField(this);
 
-        constructor() {
+        constructor(app: kendo.mobile.Application) {
+            this.app = app;
             /*
             this.DetailsView.bind("show", (e) => {
                 this.onDetailsViewShow(e);
@@ -39,8 +41,9 @@ module Application {
         }
 
         private onSearchFieldSelect(): void {
-            this.TabStrip.switchTo("#details");
-            this.onTabStripSelect(null);
+            this.app.navigate("#details");
+            //this.TabStrip.switchTo("#details");
+            //this.onTabStripSelect(null);
         }
 
     }

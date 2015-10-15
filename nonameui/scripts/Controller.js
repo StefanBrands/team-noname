@@ -1,12 +1,15 @@
+/// <reference path="./SearchField.ts" />
 var Application;
 (function (Application) {
     var Controller = (function () {
-        function Controller() {
+        function Controller(app) {
             var _this = this;
             this.navBar = $("#navbar");
             this.homeView = $("#home");
             this.detailsView = $("#details");
             this.searchField = new Application.SearchField(this);
+            this.app = app;
+
             /*
             this.DetailsView.bind("show", (e) => {
             this.onDetailsViewShow(e);
@@ -49,8 +52,9 @@ var Application;
         };
 
         Controller.prototype.onSearchFieldSelect = function () {
-            this.TabStrip.switchTo("#details");
-            this.onTabStripSelect(null);
+            this.app.navigate("#details");
+            //this.TabStrip.switchTo("#details");
+            //this.onTabStripSelect(null);
         };
         return Controller;
     })();
