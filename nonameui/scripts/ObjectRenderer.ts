@@ -16,8 +16,11 @@ module Application {
             }
         }
 
-        private renderField(field: EntityMetadata,fieldValue: any) {
-            this.objectRendererJQ.append(field.fieldLabel + ": " + fieldValue + "<br/>");
+        private renderField(field: EntityMetadata, fieldValue: any) {
+            if (field.dataType.toLowerCase().indexOf("date")>=0)
+                this.objectRendererJQ.append(field.fieldLabel + ": " + (new Date(fieldValue)).toLocaleDateString() + "<br/>");
+            else
+                this.objectRendererJQ.append(field.fieldLabel + ": " + fieldValue + "<br/>");
         }
         
         
