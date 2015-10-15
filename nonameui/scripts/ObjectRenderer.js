@@ -12,7 +12,10 @@ var Application;
         };
 
         ObjectRenderer.prototype.renderField = function (field, fieldValue) {
-            this.objectRendererJQ.append(field.fieldLabel + ": " + fieldValue + "<br/>");
+            if (field.dataType.toLowerCase().indexOf("date") >= 0)
+                this.objectRendererJQ.append(field.fieldLabel + ": " + (new Date(fieldValue)).toLocaleDateString() + "<br/>");
+            else
+                this.objectRendererJQ.append(field.fieldLabel + ": " + fieldValue + "<br/>");
         };
         return ObjectRenderer;
     })();
