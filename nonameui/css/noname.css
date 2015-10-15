@@ -28,3 +28,7 @@ float: left;
 font-size: small;
 padding-left: 10px;
 }
+
+.searchInput {
+    width: 100%;
+}
