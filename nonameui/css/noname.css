@@ -1,0 +1,30 @@
+.announcement
+{
+font-size: large;
+padding-bottom: 15px;
+}
+
+.rcorners
+{
+border-radius: 25px;
+border: 2px solid #000000;
+display: inline-block;
+margin: 2%;
+padding: 20px;
+width: 96%;
+}
+
+.labels
+{
+float: left;
+font-size: small;
+font-weight: bold;
+padding-left: 10px;
+}
+
+.values
+{
+float: left;
+font-size: small;
+padding-left: 10px;
+}
