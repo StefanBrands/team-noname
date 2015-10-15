@@ -1,19 +1,20 @@
 /// <reference path="./SearchField.ts" />
 module Application {
-    export class Controller implements SearchFieldSelectEventHandler {
+    export class Controller implements SearchFieldSelectEventHandler, EntityMetadataAdapterListener,EntityObjectListener {
+        private baseUrl: string = "http://localhost:8080";
         private app: kendo.mobile.Application;
         private navBar: JQuery = $("#navbar");
         private homeView: JQuery = $("#home");
         private detailsView: JQuery = $("#details");
-        private searchField: SearchField = new SearchField(this);
+        private searchField: SearchField = new SearchField(this.baseUrl,this);
+        private entityMetadataAdapter: EntityMetadataAdapter = new EntityMetadataAdapter(this.baseUrl, this);
+        private entityObject: EntityObject = new EntityObject(this.baseUrl,this);
+        private objectRenderer: ObjectRenderer = new ObjectRenderer(this.baseUrl);
+        private entityMetaDataReceived: EntityMetadata[] = null;
+        private entityObjectReceived: boolean = false;
 
         constructor(app: kendo.mobile.Application) {
             this.app = app;
-            /*
-            this.DetailsView.bind("show", (e) => {
-                this.onDetailsViewShow(e);
-            });
-            */
             this.TabStrip.bind("select", (e) => {
                 this.onTabStripSelect(e);
             });
@@ -31,19 +32,41 @@ module Application {
             return this.detailsView.data("kendoMobileView");
         }
 
-        private onDetailsViewShow(e: kendo.mobile.ui.ViewShowEvent): void {
-            
-        }
-
         private onTabStripSelect(e: kendo.mobile.ui.TabStripSelectEvent): void {
-            if (e==null || e.item[0].hash == "#details"){
-            }
+            this.onViewSelected(e.item[0].hash)
         }
 
         private onSearchFieldSelect(): void {
             this.app.navigate("#details");
-            //this.TabStrip.switchTo("#details");
-            //this.onTabStripSelect(null);
+            this.onViewSelected("#details");
+        }
+
+        private onViewSelected(viewName: string): void {
+            if (viewName == "#details") {
+                this.entityMetaDataReceived = null;
+                this.entityObjectReceived = false;
+                this.entityMetadataAdapter.get("urn:be:" + this.searchField.Value.objectType);
+                this.entityObject.get(this.searchField.Value);
+                
+            }
+        }
+
+        private EntityMetadataAdapterListener_entityMetadataReceived(entityMetadata: EntityMetadata[]) {
+            this.entityMetaDataReceived = entityMetadata;
+            this.renderEntityObject();
+        }
+
+        private EntityObjectListener_dataReceived() {
+            this.entityObjectReceived = true;
+            this.renderEntityObject();
+        }
+
+        private renderEntityObject() {
+            if (this.entityMetaDataReceived != null && this.entityObjectReceived) {
+                if (this.entityMetaDataReceived.length > 0) {
+                    this.objectRenderer.render(this.entityMetaDataReceived,this.entityObject);
+                }
+            }
         }
 
     }

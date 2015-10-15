@@ -1,14 +1,30 @@
 var Application;
 (function (Application) {
     var SearchField = (function () {
-        function SearchField(searchFieldSelectEventHandler) {
+        function SearchField(baseUrl, searchFieldSelectEventHandler) {
             this.sugList = $("#suggestions");
+            this.baseUrl = baseUrl;
             this.searchFieldSelectEventHandler = searchFieldSelectEventHandler;
             this.initialize();
         }
         Object.defineProperty(SearchField.prototype, "kendoMobileListView", {
             get: function () {
                 return this.sugList.data("kendoMobileListView");
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+        Object.defineProperty(SearchField.prototype, "Value", {
+            get: function () {
+                var objectCode = $("#searchField").val();
+                if (this.searchResultObjects) {
+                    for (var i = 0; i < this.searchResultObjects.length; i++) {
+                        if (this.searchResultObjects[i].objectCode == objectCode)
+                            return this.searchResultObjects[i];
+                    }
+                }
+                return null;
             },
             enumerable: true,
             configurable: true
@@ -39,7 +55,7 @@ var Application;
             } else {
                 if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                     this.runningCall.abort();
-                this.runningCall = $.get("http://localhost:8080/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
+                this.runningCall = $.get(this.baseUrl + "/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
                     _this.onServicecallReturn(res, code);
                 }, "json");
             }
@@ -47,6 +63,7 @@ var Application;
 
         SearchField.prototype.onServicecallReturn = function (res, code) {
             var str = "";
+            this.searchResultObjects = res;
             for (var i = 0, len = res.length; i < len; i++) {
                 var searchResultObject = res[i];
                 str += "<li>" + searchResultObject.objectCode + "</li>";

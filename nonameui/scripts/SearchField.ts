@@ -4,17 +4,31 @@ module Application {
     }
     
     export class SearchField {
+        private baseUrl: string;
         private sugList: JQuery=$("#suggestions");
         private runningCall: XMLHttpRequest;
         private searchFieldSelectEventHandler: SearchFieldSelectEventHandler;
+        private searchResultObjects: SearchResultObject[];
         
-        constructor(searchFieldSelectEventHandler: SearchFieldSelectEventHandler) {
+        constructor(baseUrl: string, searchFieldSelectEventHandler: SearchFieldSelectEventHandler) {
+            this.baseUrl = baseUrl;
             this.searchFieldSelectEventHandler = searchFieldSelectEventHandler;
             this.initialize();
         }
         
         public get kendoMobileListView(): kendo.mobile.ui.ListView {
             return this.sugList.data("kendoMobileListView");
+        }
+
+        public get Value(): SearchResultObject {
+            var objectCode = $("#searchField").val();
+            if (this.searchResultObjects) {
+                for (var i: number = 0; i < this.searchResultObjects.length; i++) {
+                    if (this.searchResultObjects[i].objectCode == objectCode)
+                        return this.searchResultObjects[i];
+                }
+            }
+            return null;
         }
 
         private onClick(e): void {
@@ -38,13 +52,14 @@ module Application {
              } else {
                  if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                      this.runningCall.abort();
-                 this.runningCall = $.get("http://localhost:8080/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
+                 this.runningCall = $.get(this.baseUrl+"/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
              }
             
         }
         
         private onServicecallReturn(res,code) {
             var str = "";
+            this.searchResultObjects = <SearchResultObject[]>res;
             for (var i = 0, len = res.length; i < len; i++) {
                  var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
                  str += "<li>"+searchResultObject.objectCode+"</li>";

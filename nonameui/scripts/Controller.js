@@ -4,17 +4,17 @@ var Application;
     var Controller = (function () {
         function Controller(app) {
             var _this = this;
+            this.baseUrl = "http://localhost:8080";
             this.navBar = $("#navbar");
             this.homeView = $("#home");
             this.detailsView = $("#details");
-            this.searchField = new Application.SearchField(this);
+            this.searchField = new Application.SearchField(this.baseUrl, this);
+            this.entityMetadataAdapter = new Application.EntityMetadataAdapter(this.baseUrl, this);
+            this.entityObject = new Application.EntityObject(this.baseUrl, this);
+            this.objectRenderer = new Application.ObjectRenderer(this.baseUrl);
+            this.entityMetaDataReceived = null;
+            this.entityObjectReceived = false;
             this.app = app;
-
-            /*
-            this.DetailsView.bind("show", (e) => {
-            this.onDetailsViewShow(e);
-            });
-            */
             this.TabStrip.bind("select", function (e) {
                 _this.onTabStripSelect(e);
             });
@@ -43,18 +43,40 @@ var Application;
             configurable: true
         });
 
-        Controller.prototype.onDetailsViewShow = function (e) {
-        };
-
         Controller.prototype.onTabStripSelect = function (e) {
-            if (e == null || e.item[0].hash == "#details") {
-            }
+            this.onViewSelected(e.item[0].hash);
         };
 
         Controller.prototype.onSearchFieldSelect = function () {
             this.app.navigate("#details");
-            //this.TabStrip.switchTo("#details");
-            //this.onTabStripSelect(null);
+            this.onViewSelected("#details");
+        };
+
+        Controller.prototype.onViewSelected = function (viewName) {
+            if (viewName == "#details") {
+                this.entityMetaDataReceived = null;
+                this.entityObjectReceived = false;
+                this.entityMetadataAdapter.get("urn:be:" + this.searchField.Value.objectType);
+                this.entityObject.get(this.searchField.Value);
+            }
+        };
+
+        Controller.prototype.EntityMetadataAdapterListener_entityMetadataReceived = function (entityMetadata) {
+            this.entityMetaDataReceived = entityMetadata;
+            this.renderEntityObject();
+        };
+
+        Controller.prototype.EntityObjectListener_dataReceived = function () {
+            this.entityObjectReceived = true;
+            this.renderEntityObject();
+        };
+
+        Controller.prototype.renderEntityObject = function () {
+            if (this.entityMetaDataReceived != null && this.entityObjectReceived) {
+                if (this.entityMetaDataReceived.length > 0) {
+                    this.objectRenderer.render(this.entityMetaDataReceived, this.entityObject);
+                }
+            }
         };
         return Controller;
     })();
