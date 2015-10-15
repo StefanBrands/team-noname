@@ -58,6 +58,8 @@ var Application;
                 this.entityObjectReceived = false;
                 this.entityMetadataAdapter.get("urn:be:" + this.searchField.Value.objectType);
                 this.entityObject.get(this.searchField.Value);
+            } else {
+                $("#searchField").val("");
             }
         };
 
