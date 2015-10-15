@@ -2,28 +2,58 @@ module Application {
 
     export class ObjectRenderer {
         private baseUrl: string;
-        private objectRendererLabelsJQ: JQuery = $("#objectRendererLabels");
-        private objectRendererValuesJQ: JQuery = $("#objectRendererValues");
+        private objectRendererJQ: JQuery = $("#objectRenderer");
         private entityMetadata: EntityMetadata[];
         private entityObject: EntityObject;
+        private filter: string=null;
         
         constructor(baseUrl: string) {
             this.baseUrl = baseUrl;
+            $("#searchFieldDetails").on("input", (e) => { this.onInput(e); });
         }
 
-        private render(entityMetadata: EntityMetadata[],entityObject: EntityObject) {
-            for (var i: number = 0; i < entityMetadata.length; i++) {
-                this.renderField(entityMetadata[i],entityObject.getFieldValue(entityMetadata[i].fieldName));
+        private onInput(e: JQueryObject): void {
+            this.filter=$("#searchFieldDetails").val();
+            this.render();
+        }
+        
+        public get MetaData(): EntityMetadata {
+            return this.entityMetadata;
+        }
+
+        
+        public set MetaData(value: EntityMetadata) {
+            this.entityMetadata=value;
+        }
+
+        public get DataObject(): EntityObject {
+            return this.entityObject;
+        }
+        
+        public set DataObject(value: EntityObject) {
+            this.entityObject=value;
+        }
+        
+        
+        private render() {
+            this.objectRendererJQ.empty();
+            for (var i: number = 0; i < this.entityMetadata.length; i++) {
+                if (!this.filter || this.filter.length==0 || this.entityMetadata[i].fieldLabel.toLowerCase().indexOf(this.filter.toLowerCase())>=0)
+                    this.renderField(this.entityMetadata[i],this.entityObject.getFieldValue(this.entityMetadata[i].fieldName));
             }
         }
 
         private renderField(field: EntityMetadata, fieldValue: any) {
-            this.objectRendererLabelsJQ.append(field.fieldLabel + "<br/>");
-            
+            var strValue: string;
             if (field.dataType.toLowerCase().indexOf("date")>=0)
-                this.objectRendererValuesJQ.append((new Date(fieldValue)).toLocaleDateString() + "<br/>");
+                strValue=(new Date(fieldValue)).toLocaleDateString();
             else
-                this.objectRendererValuesJQ.append(fieldValue + "<br/>");
+                strValue=fieldValue;
+
+            var strAppend: string = "<div class=\"labels\">" + field.fieldLabel + "</div>";
+            strAppend += "<div class=\"values\">" + strValue + "</div>";
+
+            this.objectRendererJQ.append(strAppend + "<br/>");
         }
    }
 }

@@ -66,7 +66,9 @@ module Application {
         private renderEntityObject() {
             if (this.entityMetaDataReceived != null && this.entityObjectReceived) {
                 if (this.entityMetaDataReceived.length > 0) {
-                    this.objectRenderer.render(this.entityMetaDataReceived,this.entityObject);
+                    this.objectRenderer.MetaData = this.entityMetaDataReceived;
+                    this.objectRenderer.DataObject = this.entityObject;
+                    this.objectRenderer.render();
                 }
             }
         }
