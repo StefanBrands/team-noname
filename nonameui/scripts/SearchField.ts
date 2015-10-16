@@ -21,7 +21,8 @@ module Application {
         }
 
         public get Value(): SearchResultObject {
-            var objectCode = $("#searchField").val();
+            var objectCode: string = $("#searchField").val().split("(")[0].trim();
+            
             if (this.searchResultObjects) {
                 for (var i: number = 0; i < this.searchResultObjects.length; i++) {
                     if (this.searchResultObjects[i].objectCode == objectCode)
@@ -62,7 +63,8 @@ module Application {
             this.searchResultObjects = <SearchResultObject[]>res;
             for (var i = 0, len = res.length; i < len; i++) {
                  var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
-                 str += "<li>"+searchResultObject.objectCode+"</li>";
+                 var objType: string[] = searchResultObject.objectType.split(".");
+                 str += "<li>" + searchResultObject.objectCode + " (" + objType[objType.length - 1].substr(1) + ")</li>";
              }
              this.sugList.html(str);
             console.dir(res);

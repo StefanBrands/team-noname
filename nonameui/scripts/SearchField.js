@@ -17,7 +17,8 @@ var Application;
 
         Object.defineProperty(SearchField.prototype, "Value", {
             get: function () {
-                var objectCode = $("#searchField").val();
+                var objectCode = $("#searchField").val().split("(")[0].trim();
+
                 if (this.searchResultObjects) {
                     for (var i = 0; i < this.searchResultObjects.length; i++) {
                         if (this.searchResultObjects[i].objectCode == objectCode)
@@ -66,7 +67,8 @@ var Application;
             this.searchResultObjects = res;
             for (var i = 0, len = res.length; i < len; i++) {
                 var searchResultObject = res[i];
-                str += "<li>" + searchResultObject.objectCode + "</li>";
+                var objType = searchResultObject.objectType.split(".");
+                str += "<li>" + searchResultObject.objectCode + " (" + objType[objType.length - 1].substr(1) + ")</li>";
             }
             this.sugList.html(str);
             console.dir(res);
