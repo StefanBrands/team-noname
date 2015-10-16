@@ -5,7 +5,8 @@ module Application {
         private objectRendererJQ: JQuery = $("#objectRenderer");
         private entityMetadata: EntityMetadata[];
         private entityObject: EntityObject;
-        private filter: string=null;
+        private filter: string = null;
+        private objectTitle: string;
         
         constructor(baseUrl: string) {
             this.baseUrl = baseUrl;
@@ -34,9 +35,19 @@ module Application {
             this.entityObject=value;
         }
         
+        public get ObjectTitle(): string {
+            return this.objectTitle;
+        }
+        
+        public set ObjectTitle(value: sring) {
+            this.objectTitle=value;
+        }
         
         private render() {
             this.objectRendererJQ.empty();
+            if (this.objectTitle)
+                $("#entityTypeDetails").text = "Details of " + this.objectTitle;
+            
             for (var i: number = 0; i < this.entityMetadata.length; i++) {
                 var fieldValue:any  = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName)
                 var cont: boolean = !this.filter || this.filter.length == 0 || this.entityMetadata[i].fieldLabel.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;

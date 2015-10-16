@@ -39,8 +39,23 @@ var Application;
         });
 
 
+        Object.defineProperty(ObjectRenderer.prototype, "ObjectTitle", {
+            get: function () {
+                return this.objectTitle;
+            },
+            set: function (value) {
+                this.objectTitle = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
         ObjectRenderer.prototype.render = function () {
             this.objectRendererJQ.empty();
+            if (this.objectTitle)
+                $("#entityTypeDetails").text = "Details of " + this.objectTitle;
+
             for (var i = 0; i < this.entityMetadata.length; i++) {
                 var fieldValue = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName);
                 var cont = !this.filter || this.filter.length == 0 || this.entityMetadata[i].fieldLabel.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;

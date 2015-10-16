@@ -66,6 +66,8 @@ module Application {
         private renderEntityObject() {
             if (this.entityMetaDataReceived != null && this.entityObjectReceived) {
                 if (this.entityMetaDataReceived.length > 0) {
+                    var objType: string[] = this.searchField.Value.objectType.split(".");
+                    this.objectRenderer.ObjectTitle = objType[objType.length - 1].substr(1) + " " + this.searchField.Value.objectDescription;
                     this.objectRenderer.MetaData = this.entityMetaDataReceived;
                     this.objectRenderer.DataObject = this.entityObject;
                     this.objectRenderer.render();
