@@ -38,10 +38,10 @@ module Application {
         private render() {
             this.objectRendererJQ.empty();
             for (var i: number = 0; i < this.entityMetadata.length; i++) {
-                var fieldValue = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName)
+                var fieldValue:any  = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName)
                 var cont: boolean = !this.filter || this.filter.length == 0 || this.entityMetadata[i].fieldLabel.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
                 if (!cont)
-                    cont = fieldValue && fieldValue.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
+                    cont = fieldValue && fieldValue.toString().toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
                 if (cont)
                     this.renderField(this.entityMetadata[i],fieldValue);
             }
