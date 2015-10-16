@@ -23,7 +23,10 @@ padding-bottom: 15px;
 .border
 {
 display: inline-block;
-margin: 2%;
+margin-top:15px;
+margin-left: 2%;
+margin-right: 2%;
+margin-bottom: 2%;
 width: 96%;
 }
 

@@ -4,7 +4,7 @@
     <title>My App</title>
 
     <!-- <link href="css/kendo.mobile.all.min.css" rel="stylesheet" /> !-->
-    <link href="css/kendo.mobile.office365.min.css" rel="stylesheet" />
+    <link href="css/kendo.mobile.material.min.css" rel="stylesheet" />
     <link href="css/noname.css" rel="stylesheet" />
 </head>
 <body>
@@ -15,10 +15,9 @@
 
     <div id="home" data-role="view" data-layout="default">
         <div class="border">
-            <p>
-                 Search for any object :<input type="search" class="k-textbox searchInput" id="searchField" placeholder="Search">
-                 <ul id="suggestions" data-role="listview" data-inset="true"></ul>
-             </p>
+            <div class="announcement" id="entityTypeDetails"></div>
+             Search for any object :<input type="search" class="k-textbox searchInput" id="searchField" placeholder="Search">
+             <ul id="suggestions" data-role="listview" ></ul>
          </div>
     </div>
     <div id="details" data-role="view" data-layout="default">
@@ -37,8 +36,8 @@
         <!--View content will render here-->
         <footer data-role="footer">
             <div id="navbar" data-role="tabstrip">
-                <a href="#home">Home</a>
-                <a href="#details">Details</a>
+                <a href="#home" data-icon="home">Home</a>
+                <a href="#details" data-icon="details">Details</a>
             </div>
         </footer>
     </section>
