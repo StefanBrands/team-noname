@@ -4,13 +4,10 @@ font-size: large;
 padding-bottom: 15px;
 }
 
-.rcorners
+.border
 {
-border-radius: 25px;
-border: 2px solid #000000;
 display: inline-block;
 margin: 2%;
-padding: 20px;
 width: 96%;
 }
 
@@ -20,7 +17,7 @@ float: left;
 font-size: small;
 font-weight: bold;
 padding-left: 10px;
-width: 70%;
+width: 60%;
 }
 
 .values
@@ -33,4 +30,5 @@ width: 30%;
 
 .searchInput {
     width: 100%;
+    font-size: large;
 }

@@ -3,7 +3,8 @@
 <head>
     <title>My App</title>
 
-    <link href="css/kendo.mobile.all.min.css" rel="stylesheet" />
+    <!-- <link href="css/kendo.mobile.all.min.css" rel="stylesheet" /> !-->
+    <link href="css/kendo.mobile.office365.min.css" rel="stylesheet" />
     <link href="css/noname.css" rel="stylesheet" />
 </head>
 <body>
@@ -13,17 +14,19 @@
     </div>
 
     <div id="home" data-role="view" data-layout="default">
-        <p>
-             Search <input type="search" class="searchInput" id="searchField" placeholder="Search">
-             <ul id="suggestions" data-role="listview" data-inset="true"></ul>
-         </p>
+        <div class="border">
+            <p>
+                 Search <input type="search" class="k-textbox searchInput" id="searchField" placeholder="Search">
+                 <ul id="suggestions" data-role="listview" data-inset="true"></ul>
+             </p>
+         </div>
     </div>
     <div id="details" data-role="view" data-layout="default">
-        <div class="rcorners">
+        <div class="border">
             <div class="announcement" id="entityTypeDetails">Details</div>
-             Search <input type="search" class="searchInput" id="searchFieldDetails" placeholder="Search">
+             Search <input type="search" class="k-textbox searchInput" id="searchFieldDetails" placeholder="Search">
             <p/>
-            <div id="objectRenderer"></div>
+            <div id="objectRenderer" ></div>
         </div>
     </div>
 
