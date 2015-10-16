@@ -42,8 +42,12 @@ var Application;
         ObjectRenderer.prototype.render = function () {
             this.objectRendererJQ.empty();
             for (var i = 0; i < this.entityMetadata.length; i++) {
-                if (!this.filter || this.filter.length == 0 || this.entityMetadata[i].fieldLabel.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0)
-                    this.renderField(this.entityMetadata[i], this.entityObject.getFieldValue(this.entityMetadata[i].fieldName));
+                var fieldValue = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName);
+                var cont = !this.filter || this.filter.length == 0 || this.entityMetadata[i].fieldLabel.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
+                if (!cont)
+                    cont = fieldValue && fieldValue.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
+                if (cont)
+                    this.renderField(this.entityMetadata[i], fieldValue);
             }
         };
 

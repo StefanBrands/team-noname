@@ -29,6 +29,7 @@ width: 30%;
 }
 
 .searchInput {
+    margin-top: 5px;
     width: 100%;
     font-size: large;
 }
