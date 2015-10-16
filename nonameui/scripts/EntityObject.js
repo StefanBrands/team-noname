@@ -9,7 +9,9 @@ var Application;
             var _this = this;
             if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                 this.runningCall.abort();
-            this.runningCall = $.get(this.baseUrl + "/noname/item?" + searchResultObject.objectKey.replace("|", "&"), null, function (res, code) {
+
+            var objType = searchResultObject.objectType.split(".");
+            this.runningCall = $.get(this.baseUrl + "/noname/" + objType[objType.length - 1].toLowerCase().substr(1) + "?" + searchResultObject.objectKey.replace("|", "&"), null, function (res, code) {
                 _this.onServicecallReturn(res, code);
             }, "json");
         };

@@ -15,10 +15,11 @@ module Application {
         }
 
         public get(searchResultObject: SearchResultObject): void {
-             if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
-                 this.runningCall.abort();
-             this.runningCall = $.get(this.baseUrl+"/noname/item?" + searchResultObject.objectKey.replace("|","&"), null, (res, code) => { this.onServicecallReturn(res, code); }, "json");
-            
+            if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
+                this.runningCall.abort();
+
+            var objType: string[] = searchResultObject.objectType.split(".");
+            this.runningCall = $.get(this.baseUrl + "/noname/" + objType[objType.length - 1].toLowerCase().substr(1) + "?" + searchResultObject.objectKey.replace("|", "&"), null, (res, code) => { this.onServicecallReturn(res, code); }, "json");
         }
         
         private onServicecallReturn(res, code) {
