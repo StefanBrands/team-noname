@@ -60,6 +60,10 @@ module Application {
         
         private onServicecallReturn(res,code) {
             var str = "";
+
+            if (res.length == 0)
+                return;
+            
             this.searchResultObjects = <SearchResultObject[]>res;
             for (var i = 0, len = res.length; i < len; i++) {
                  var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
