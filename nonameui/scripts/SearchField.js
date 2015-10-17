@@ -72,7 +72,8 @@ var Application;
             for (var i = 0, len = res.length; i < len; i++) {
                 var searchResultObject = res[i];
                 var objType = searchResultObject.objectType.split(".");
-                str += "<li>" + searchResultObject.objectCode + " (" + objType[objType.length - 1].substr(1) + ")</li>";
+                str += "<li><h3>" + objType[objType.length - 1].substr(1) + " " + searchResultObject.objectCode + "</h3>";
+                str += "<p>" + searchResultObject.objectDescription + "</p></li>";
             }
             this.sugList.html(str);
             console.dir(res);
