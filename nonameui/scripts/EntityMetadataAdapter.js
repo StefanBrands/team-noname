@@ -1,7 +1,8 @@
 var Application;
 (function (Application) {
     var EntityMetadataAdapter = (function () {
-        function EntityMetadataAdapter(baseUrl, listener) {
+        function EntityMetadataAdapter(app, baseUrl, listener) {
+            this.app = app;
             this.baseUrl = baseUrl;
             this.listener = listener;
         }
@@ -9,6 +10,7 @@ var Application;
             var _this = this;
             if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                 this.runningCall.abort();
+            this.app.showLoading();
             this.runningCall = $.get(this.baseUrl + "/noname/entitymetadata?entityUri=" + entityUri, null, function (res, code) {
                 _this.onServicecallReturn(res, code);
             }, "json");
@@ -19,6 +21,7 @@ var Application;
                 this.listener.EntityMetadataAdapterListener_entityMetadataReceived(res);
             console.dir(res);
             this.runningCall = null;
+            this.app.hideLoading();
         };
         return EntityMetadataAdapter;
     })();

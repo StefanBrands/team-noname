@@ -1,15 +1,24 @@
 var Application;
 (function (Application) {
     var ObjectRenderer = (function () {
-        function ObjectRenderer(baseUrl) {
+        function ObjectRenderer(app, baseUrl) {
             var _this = this;
-            this.objectRendererJQ = $("#objectRenderer");
+            this.fieldsList = $("#detailfields");
             this.filter = null;
+            this.app = app;
             this.baseUrl = baseUrl;
             $("#searchFieldDetails").on("input", function (e) {
                 _this.onInput(e);
             });
         }
+        Object.defineProperty(ObjectRenderer.prototype, "kendoMobileListView", {
+            get: function () {
+                return this.fieldsList.data("kendoMobileListView");
+            },
+            enumerable: true,
+            configurable: true
+        });
+
         ObjectRenderer.prototype.onInput = function (e) {
             this.filter = $("#searchFieldDetails").val();
             this.render();
@@ -52,9 +61,9 @@ var Application;
 
 
         ObjectRenderer.prototype.render = function () {
-            this.objectRendererJQ.empty();
+            var str = "";
             if (this.objectTitle)
-                $("#entityTypeDetails").text = "Details of " + this.objectTitle;
+                $("#entityTypeDetails").text("Details of " + this.objectTitle);
 
             for (var i = 0; i < this.entityMetadata.length; i++) {
                 var fieldValue = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName);
@@ -62,8 +71,9 @@ var Application;
                 if (!cont)
                     cont = fieldValue && fieldValue.toString().toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
                 if (cont)
-                    this.renderField(this.entityMetadata[i], fieldValue);
+                    str += this.renderField(this.entityMetadata[i], fieldValue);
             }
+            this.fieldsList.html(str);
         };
 
         ObjectRenderer.prototype.renderField = function (field, fieldValue) {
@@ -73,10 +83,10 @@ var Application;
             else
                 strValue = fieldValue;
 
-            var strAppend = "<div class=\"labels\">" + field.fieldLabel + "</div>";
-            strAppend += "<div class=\"values\">" + strValue + "</div>";
+            var strAppend = "<li><b>" + field.fieldLabel + "</b>";
+            strAppend += " : " + strValue + "</li><hr>";
 
-            this.objectRendererJQ.append(strAppend + "<br/>");
+            return strAppend;
         };
         return ObjectRenderer;
     })();

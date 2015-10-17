@@ -6,10 +6,10 @@ module Application {
         private navBar: JQuery = $("#navbar");
         private homeView: JQuery = $("#home");
         private detailsView: JQuery = $("#details");
-        private searchField: SearchField = new SearchField(this.baseUrl,this);
-        private entityMetadataAdapter: EntityMetadataAdapter = new EntityMetadataAdapter(this.baseUrl, this);
-        private entityObject: EntityObject = new EntityObject(this.baseUrl,this);
-        private objectRenderer: ObjectRenderer = new ObjectRenderer(this.baseUrl);
+        private searchField: SearchField;
+        private entityMetadataAdapter: EntityMetadataAdapter;
+        private entityObject: EntityObject;
+        private objectRenderer: ObjectRenderer;
         private entityMetaDataReceived: EntityMetadata[] = null;
         private entityObjectReceived: boolean = false;
 
@@ -18,6 +18,10 @@ module Application {
             this.TabStrip.bind("select", (e) => {
                 this.onTabStripSelect(e);
             });
+            this.searchField = new SearchField(this.app,this.baseUrl,this);
+            this.entityMetadataAdapter = new EntityMetadataAdapter(this.app,this.baseUrl, this);
+            this.entityObject = new EntityObject(this.baseUrl,this);
+            this.objectRenderer = new ObjectRenderer(this.app,this.baseUrl);
         }
 
         private get TabStrip(): kendo.mobile.ui.TabStrip {
@@ -36,9 +40,11 @@ module Application {
             this.onViewSelected(e.item[0].hash)
         }
 
-        private onSearchFieldSelect(): void {
-            //this.app.navigate("#details");
-            //this.onViewSelected("#details");
+        private onSearchFieldSelect(secondClick: boolean): void {
+            if (secondClick) {
+                this.app.navigate("#details");
+                this.onViewSelected("#details");
+            }
         }
 
         private onViewSelected(viewName: string): void {
@@ -67,7 +73,7 @@ module Application {
             if (this.entityMetaDataReceived != null && this.entityObjectReceived) {
                 if (this.entityMetaDataReceived.length > 0) {
                     var objType: string[] = this.searchField.Value.objectType.split(".");
-                    this.objectRenderer.ObjectTitle = objType[objType.length - 1].substr(1) + " " + this.searchField.Value.objectDescription;
+                    this.objectRenderer.ObjectTitle = objType[objType.length - 1].substr(1) + " : " + this.searchField.Value.objectDescription;
                     this.objectRenderer.MetaData = this.entityMetaDataReceived;
                     this.objectRenderer.DataObject = this.entityObject;
                     this.objectRenderer.render();

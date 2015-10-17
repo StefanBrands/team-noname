@@ -1,16 +1,22 @@
 module Application {
 
     export class ObjectRenderer {
+        private app: kendo.mobile.Application;
         private baseUrl: string;
-        private objectRendererJQ: JQuery = $("#objectRenderer");
+        private fieldsList: JQuery=$("#detailfields");
         private entityMetadata: EntityMetadata[];
         private entityObject: EntityObject;
         private filter: string = null;
         private objectTitle: string;
         
-        constructor(baseUrl: string) {
+        constructor(app: kendo.mobile.Application,baseUrl: string) {
+            this.app = app;
             this.baseUrl = baseUrl;
             $("#searchFieldDetails").on("input", (e) => { this.onInput(e); });
+        }
+
+        public get kendoMobileListView(): kendo.mobile.ui.ListView {
+            return this.fieldsList.data("kendoMobileListView");
         }
 
         private onInput(e: JQueryObject): void {
@@ -44,9 +50,9 @@ module Application {
         }
         
         private render() {
-            this.objectRendererJQ.empty();
+            var str = "";
             if (this.objectTitle)
-                $("#entityTypeDetails").text = "Details of " + this.objectTitle;
+                $("#entityTypeDetails").text("Details of " + this.objectTitle);
             
             for (var i: number = 0; i < this.entityMetadata.length; i++) {
                 var fieldValue:any  = this.entityObject.getFieldValue(this.entityMetadata[i].fieldName)
@@ -54,21 +60,22 @@ module Application {
                 if (!cont)
                     cont = fieldValue && fieldValue.toString().toLowerCase().indexOf(this.filter.toLowerCase()) >= 0;
                 if (cont)
-                    this.renderField(this.entityMetadata[i],fieldValue);
+                    str+=this.renderField(this.entityMetadata[i],fieldValue);
             }
+             this.fieldsList.html(str);
         }
 
-        private renderField(field: EntityMetadata, fieldValue: any) {
+        private renderField(field: EntityMetadata, fieldValue: any): string {
             var strValue: string;
             if (field.dataType.toLowerCase().indexOf("date")>=0)
                 strValue=(new Date(fieldValue)).toLocaleDateString();
             else
                 strValue=fieldValue;
 
-            var strAppend: string = "<div class=\"labels\">" + field.fieldLabel + "</div>";
-            strAppend += "<div class=\"values\">" + strValue + "</div>";
+            var strAppend: string = "<li><b>" + field.fieldLabel + "</b>";
+            strAppend += " : " + strValue + "</li><hr>";
 
-            this.objectRendererJQ.append(strAppend + "<br/>");
+            return strAppend;
         }
    }
 }

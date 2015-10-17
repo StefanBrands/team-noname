@@ -1,16 +1,18 @@
 module Application {
     export interface SearchFieldSelectEventHandler {
-        onSearchFieldSelect(): void;
+        onSearchFieldSelect(secondClick:boolean): void;
     }
     
     export class SearchField {
+        private app: kendo.mobile.Application;
         private baseUrl: string;
         private sugList: JQuery=$("#suggestions");
         private runningCall: XMLHttpRequest;
         private searchFieldSelectEventHandler: SearchFieldSelectEventHandler;
         private searchResultObjects: SearchResultObject[];
         
-        constructor(baseUrl: string, searchFieldSelectEventHandler: SearchFieldSelectEventHandler) {
+        constructor(app: kendo.mobile.Application,baseUrl: string, searchFieldSelectEventHandler: SearchFieldSelectEventHandler) {
+            this.app = app;
             this.baseUrl = baseUrl;
             this.searchFieldSelectEventHandler = searchFieldSelectEventHandler;
             this.initialize();
@@ -34,13 +36,13 @@ module Application {
 
         private selectedItemCode: string;
         private onClick(e): void {
-            this.selectedItemCode=$(e.item).attr("objectCode");
-            //$("#searchField").val(e.target.textContent);
+            this.selectedItemCode = $(e.item).attr("objectCode");
+            var secondClick: boolean = $(e.item).hasClass("listview-selected");
             $(".listview-selected").toggleClass("listview-selected");
             e.item.toggleClass("listview-selected");
 
             if (this.searchFieldSelectEventHandler != null)
-                this.searchFieldSelectEventHandler.onSearchFieldSelect();
+                this.searchFieldSelectEventHandler.onSearchFieldSelect(secondClick);
         }
         
         private initialize(): void {
@@ -57,6 +59,7 @@ module Application {
              } else {
                  if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                      this.runningCall.abort();
+                 this.app.showLoading();
                  this.runningCall = $.get(this.baseUrl+"/noname/quicksearch/ALL/" + text, { search: text }, (res, code) => { this.onServicecallReturn(res, code); }, "json");
              }
             
@@ -65,19 +68,19 @@ module Application {
         private onServicecallReturn(res,code) {
             var str = "";
 
-            if (res.length == 0)
-                return;
-            
-            this.searchResultObjects = <SearchResultObject[]>res;
-            for (var i = 0, len = res.length; i < len; i++) {
-                 var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
-                 var objType: string[] = searchResultObject.objectType.split(".");
-                str += "<li objectCode=\""+searchResultObject.objectCode+"\"><b>" + objType[objType.length - 1].substr(1) + " " + searchResultObject.objectCode + "</b>";
-                str += " - " + searchResultObject.objectDescription + "</li><hr>";
-             }
-             this.sugList.html(str);
+            if (res.length > 0) {
+                this.searchResultObjects = <SearchResultObject[]>res;
+                for (var i = 0, len = res.length; i < len; i++) {
+                    var searchResultObject: SearchResultObject = <SearchResultObject>res[i];
+                    var objType: string[] = searchResultObject.objectType.split(".");
+                    str += "<li objectCode=\"" + searchResultObject.objectCode + "\"><b>" + objType[objType.length - 1].substr(1) + " " + searchResultObject.objectCode + "</b>";
+                    str += " - " + searchResultObject.objectDescription + "</li><hr>";
+                }
+            }
+            this.sugList.html(str);
             console.dir(res);
             this.runningCall=null;
+            this.app.hideLoading();
         }
     }
 

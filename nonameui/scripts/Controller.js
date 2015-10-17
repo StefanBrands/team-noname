@@ -8,16 +8,16 @@ var Application;
             this.navBar = $("#navbar");
             this.homeView = $("#home");
             this.detailsView = $("#details");
-            this.searchField = new Application.SearchField(this.baseUrl, this);
-            this.entityMetadataAdapter = new Application.EntityMetadataAdapter(this.baseUrl, this);
-            this.entityObject = new Application.EntityObject(this.baseUrl, this);
-            this.objectRenderer = new Application.ObjectRenderer(this.baseUrl);
             this.entityMetaDataReceived = null;
             this.entityObjectReceived = false;
             this.app = app;
             this.TabStrip.bind("select", function (e) {
                 _this.onTabStripSelect(e);
             });
+            this.searchField = new Application.SearchField(this.app, this.baseUrl, this);
+            this.entityMetadataAdapter = new Application.EntityMetadataAdapter(this.app, this.baseUrl, this);
+            this.entityObject = new Application.EntityObject(this.baseUrl, this);
+            this.objectRenderer = new Application.ObjectRenderer(this.app, this.baseUrl);
         }
         Object.defineProperty(Controller.prototype, "TabStrip", {
             get: function () {
@@ -47,9 +47,11 @@ var Application;
             this.onViewSelected(e.item[0].hash);
         };
 
-        Controller.prototype.onSearchFieldSelect = function () {
-            //this.app.navigate("#details");
-            //this.onViewSelected("#details");
+        Controller.prototype.onSearchFieldSelect = function (secondClick) {
+            if (secondClick) {
+                this.app.navigate("#details");
+                this.onViewSelected("#details");
+            }
         };
 
         Controller.prototype.onViewSelected = function (viewName) {
@@ -77,7 +79,7 @@ var Application;
             if (this.entityMetaDataReceived != null && this.entityObjectReceived) {
                 if (this.entityMetaDataReceived.length > 0) {
                     var objType = this.searchField.Value.objectType.split(".");
-                    this.objectRenderer.ObjectTitle = objType[objType.length - 1].substr(1) + " " + this.searchField.Value.objectDescription;
+                    this.objectRenderer.ObjectTitle = objType[objType.length - 1].substr(1) + " : " + this.searchField.Value.objectDescription;
                     this.objectRenderer.MetaData = this.entityMetaDataReceived;
                     this.objectRenderer.DataObject = this.entityObject;
                     this.objectRenderer.render();
