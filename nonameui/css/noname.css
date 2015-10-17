@@ -36,5 +36,11 @@ width: 30%;
     margin-top: 5px;
     width: 100%;
     font-size: large;
-    background-image: url("../img/homepage.png");
+}
+.listview-selected {
+    background-color: #03A9F4;
+}
+
+.km-navbar {
+    background-color: #03A9F4;
 }

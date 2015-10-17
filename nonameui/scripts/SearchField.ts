@@ -21,7 +21,7 @@ module Application {
         }
 
         public get Value(): SearchResultObject {
-            var objectCode: string = $("#searchField").val().split("(")[0].trim();
+            var objectCode: string = this.selectedItemCode;
             
             if (this.searchResultObjects) {
                 for (var i: number = 0; i < this.searchResultObjects.length; i++) {
@@ -32,15 +32,19 @@ module Application {
             return null;
         }
 
+        private selectedItemCode: string;
         private onClick(e): void {
-            $("#searchField").val(e.target.textContent);
-            this.sugList.html("");
+            this.selectedItemCode=$(e.item).attr("objectCode");
+            //$("#searchField").val(e.target.textContent);
+            $(".listview-selected").toggleClass("listview-selected");
+            e.item.toggleClass("listview-selected");
+
             if (this.searchFieldSelectEventHandler != null)
                 this.searchFieldSelectEventHandler.onSearchFieldSelect();
         }
         
         private initialize(): void {
-            this.sugList.bind("click", (e) => {
+            this.kendoMobileListView.bind("click", (e) => {
                 this.onClick(e);
             });
             $("#searchField").on("input", (e) => { this.onInput(e); });
@@ -68,8 +72,8 @@ module Application {
             for (var i = 0, len = res.length; i < len; i++) {
                  var searchResultObject : SearchResultObject = <SearchResultObject>res[i];
                  var objType: string[] = searchResultObject.objectType.split(".");
-                str += "<li><h3>" + objType[objType.length - 1].substr(1) + " " + searchResultObject.objectCode + "</h3>";
-                str += "<p>" + searchResultObject.objectDescription + "</p></li>";
+                str += "<li objectCode=\""+searchResultObject.objectCode+"\"><b>" + objType[objType.length - 1].substr(1) + " " + searchResultObject.objectCode + "</b>";
+                str += " - " + searchResultObject.objectDescription + "</li><hr>";
              }
              this.sugList.html(str);
             console.dir(res);

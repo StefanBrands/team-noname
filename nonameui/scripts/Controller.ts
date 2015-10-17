@@ -37,8 +37,8 @@ module Application {
         }
 
         private onSearchFieldSelect(): void {
-            this.app.navigate("#details");
-            this.onViewSelected("#details");
+            //this.app.navigate("#details");
+            //this.onViewSelected("#details");
         }
 
         private onViewSelected(viewName: string): void {

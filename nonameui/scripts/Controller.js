@@ -48,8 +48,8 @@ var Application;
         };
 
         Controller.prototype.onSearchFieldSelect = function () {
-            this.app.navigate("#details");
-            this.onViewSelected("#details");
+            //this.app.navigate("#details");
+            //this.onViewSelected("#details");
         };
 
         Controller.prototype.onViewSelected = function (viewName) {
