@@ -61,7 +61,7 @@ var Application;
                 if (this.runningCall != null && this.runningCall.status != XMLHttpRequest.DONE)
                     this.runningCall.abort();
                 this.app.showLoading();
-                this.runningCall = $.get(this.baseUrl + "/noname/quicksearch/ALL/" + text, { search: text }, function (res, code) {
+                this.runningCall = $.get(this.baseUrl + "/noname/quicksearch/" + text, { search: text }, function (res, code) {
                     _this.onServicecallReturn(res, code);
                 }, "json");
             }
