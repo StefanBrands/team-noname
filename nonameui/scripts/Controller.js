@@ -4,7 +4,7 @@ var Application;
     var Controller = (function () {
         function Controller(app) {
             var _this = this;
-            this.baseUrl = "http://localhost:8080";
+            this.baseUrl = "http://vmcip01:22000";
             this.navBar = $("#navbar");
             this.homeView = $("#home");
             this.detailsView = $("#details");

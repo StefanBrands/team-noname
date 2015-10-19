@@ -1,7 +1,7 @@
 /// <reference path="./SearchField.ts" />
 module Application {
     export class Controller implements SearchFieldSelectEventHandler, EntityMetadataAdapterListener,EntityObjectListener {
-        private baseUrl: string = "http://localhost:8080";
+        private baseUrl: string = "http://vmcip01:22000";
         private app: kendo.mobile.Application;
         private navBar: JQuery = $("#navbar");
         private homeView: JQuery = $("#home");
