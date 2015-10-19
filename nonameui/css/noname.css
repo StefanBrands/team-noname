@@ -1,3 +1,7 @@
+.km-android .km-navbar div.km-view-title
+{
+    display: inline-block;
+}
 
 .announcement
 {
