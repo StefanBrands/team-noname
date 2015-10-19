@@ -11,7 +11,7 @@ var Application;
                 this.runningCall.abort();
 
             var objType = searchResultObject.objectType.split(".");
-            this.runningCall = $.get(this.baseUrl + "/noname/" + objType[objType.length - 1].toLowerCase().substr(1) + "?" + searchResultObject.objectKey.replace("|", "&"), null, function (res, code) {
+            this.runningCall = $.get(this.baseUrl + "/noname/" + objType[objType.length - 1].toLowerCase().substr(1) + "?" + searchResultObject.objectKey.replace("|", "&").replace("|", "&"), null, function (res, code) {
                 _this.onServicecallReturn(res, code);
             }, "json");
         };
